@@ -9,30 +9,56 @@ function startApp() {
 
     // main application
     var myapp = new dwv.App();
+    const cancers = [
+      { index: 155, x: 123, y: 307 },
+      { index: 156, x: 188, y: 137 }
+    ]
 
-    // display loading time
-    var listener = function (event) {
-        if (event.type === "load-start") {
-            console.time("load-data");
-        }
-        else {
-            console.timeEnd("load-data");
-        }
-    };
-    // before myapp.init since it does the url load
-    myapp.addEventListener("load-start", listener);
-    myapp.addEventListener("load-end", listener);
+    const statsEl = document.querySelector('#stats')
+    myapp.addEventListener("load-end", event => {
+      const drawStage = myapp.getDrawStage()
+      const scansArray = drawStage.children
+      // const drawLayer = scansArray[155]
+      const style = myapp.getStyle()
+      const image = myapp.getImage()
+      cancers.forEach(({ index, x, y }) => {
+        const drawLayer = scansArray[index - 1]
+        const diff = 5
+        const shapeGroup = new dwv.tool.RectangleFactory.prototype.create([
+          new dwv.math.Point2D(x - diff, y - diff),
+          new dwv.math.Point2D(x + diff, y + diff)
+        ], style, image);
+        drawLayer.add(shapeGroup);
+        drawLayer.draw();
+      })
+      statsEl.style.display = 'inline-block'
+    });
 
-    // also available:
-    //myapp.addEventListener("load-progress", listener);
-    //myapp.addEventListener("draw-create", listener);
-    //myapp.addEventListener("draw-move", listener);
-    //myapp.addEventListener("draw-change", listener);
-    //myapp.addEventListener("draw-delete", listener);
-    //myapp.addEventListener("wl-change", listener);
-    //myapp.addEventListener("colour-change", listener);
-    //myapp.addEventListener("position-change", listener);
-    //myapp.addEventListener("slice-change", listener);
+    const descButtonEl = document.querySelector('#descButton')
+    const descPopupEl = document.querySelector('#descPopup')
+    const descCloseButtonEl = document.querySelector('#descCloseButton')
+    descButtonEl.addEventListener("click", () => {
+      descPopupEl.style.display = 'inline-block'
+    })
+    descCloseButtonEl.addEventListener("click", () => {
+      descPopupEl.style.display = 'none'
+    })
+
+    const value1El = document.querySelector('#value1')
+    const value2El = document.querySelector('#value2')
+    const value3El = document.querySelector('#value3')
+    myapp.addEventListener("position-change", event => {
+      const arrayIndex = event.k
+      const cancer = cancers.find(({ index }) => (arrayIndex + 1) === index)
+      value1El.innerHTML = '<strong>Frame number:</strong> <span>' + (arrayIndex + 1) + '</span>'
+      if (cancer) {
+        value2El.innerHTML = '<strong>Volume:</strong> <span>' + parseInt(cancer.x * cancer.y * 0.8, 10) + '</span>'
+        value3El.innerHTML = '<strong>Value3:</strong> <span>200</span>'
+      } else {
+        value2El.innerHTML = ''
+        value3El.innerHTML = ''
+      }
+    });
 
     // initialise the application
     myapp.init({

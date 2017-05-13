@@ -32,6 +32,59 @@ body { margin: 10px; padding: 0; }
   background-color: #eeeeee; /* non-RGBA fallback  */
   background-color: rgba(0,0,0,0.1);
 }
+.ui-content {
+  position: relative;
+}
+.wrapper {
+  display: flex;
+}
+.infoDiv {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 300px;
+  height: 95%;
+  padding: 20px;
+  background-color: #2f2e2e;
+  border-left: 1px solid #262626;
+  color: #fff;
+}
+.description {
+  display: none;
+}
+.descPopup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 600px;
+  height: 400px;
+  display: none;
+  background: #2a2a2a;
+  border: none;
+  padding: 20px;
+}
+.descPopup h2 {
+  margin-bottom: 20px;
+}
+.descPopup div {
+  display: flex;
+}
+.descPopup img, .descPopup p {
+  margin: 10px;
+}
+.descCloseButton {
+  margin-top: 10px;
+  float: right;
+  margin-right: 10px;
+}
+a.descButton {
+  color: #fff;
+  cursor: pointer;
+}
 </style>
 <!-- mobile web app -->
 <meta name="mobile-web-app-capable" content="yes" />
@@ -151,7 +204,7 @@ body { margin: 10px; padding: 0; }
 
 <!-- pageHeader #dwvversion -->
 <div id="pageHeader" data-role="header">
-<h1>DWV <span class="dwv-version"></span></h1>
+<h1>Medical imaging</h1>
 <a href="#help_page" data-icon="carat-r" class="ui-btn-right"
   data-transition="slide" data-i18n="basics.help">Help</a>
 </div><!-- /pageHeader -->
@@ -186,18 +239,38 @@ body { margin: 10px; padding: 0; }
 </div>
 </div><!-- /popup -->
 
-<!-- Layer Container -->
-<div class="layerContainer">
-<div class="dropBox"></div>
-<canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
-<div class="drawDiv"></div>
-<div class="infoLayer">
-<div class="infotl"></div>
-<div class="infotr"></div>
-<div class="infobl"></div>
-<!-- <div class="infobr"><div class="plot"></div></div> -->
-</div><!-- /infoLayer -->
-</div><!-- /layerContainer -->
+<div class="wrapper">
+  <!-- Layer Container -->
+  <div class="layerContainer">
+    <div class="dropBox"></div>
+    <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
+    <div class="drawDiv"></div>
+    <div class="infoLayer">
+    <div class="infotl"></div>
+    <div class="infotr"></div>
+    <div class="infobl"></div>
+    <!-- <div class="infobr"><div class="plot"></div></div> -->
+    </div><!-- /infoLayer -->
+  </div><!-- /layerContainer -->
+  <div class="infoDiv" id="stats">
+    <h2>Stats</h2>
+    <p id="value1"><p>
+    <p id="value2"><p>
+    <p id="value3"><p>
+    <br/>
+    <h3>Findings</h3>
+    <p style="color: #d93c4a;"><strong>Noduly</strong>: 2</p>
+    <!-- <form id="form" class="form">
+      <input id="input1" type="text" value="" placeholder="Value 1" />
+      <input id="input2" type="text" value="" placeholder="Value 2" />
+      <input id="input3" type="text" value="" placeholder="Value 3" />
+      <input type="submit" value="Export" />
+    </form> -->
+    <h3>Next checks</h3>
+    <p>Opacity</p>
+    <p><a id="descButton" class="descButton">Fluidotorax</a></p>
+  </div>
+</div>
 
 <!-- History -->
 <div class="history" title="History" style="display:none;"></div>
@@ -212,6 +285,15 @@ body { margin: 10px; padding: 0; }
 </div><!-- /page main -->
 
 </div><!-- /dwv -->
+
+<div id="descPopup" class="ui-popup ui-body-inherit ui-overlay-shadow ui-corner-all descPopup">
+  <h2>Fluidotorax description</h2>
+  <div>
+    <img src="./Fluidotorax.jpg" width="300" height="300" />
+    <p>The right upper lobe shows confluent consolidation with evidence of cavitation within as well as bronchiectasis in right middle and upper lobe. Minor residual ground glass opacity and scarring. Patient has developed right sided hydropneumothorax.</p>
+  </div>
+  <a id="descCloseButton" class="descCloseButton">Close</a>
+</div>
 
 <!-- Tags page -->
 <div data-role="page" data-theme="b" id="tags_page">
